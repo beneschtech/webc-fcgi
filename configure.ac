@@ -1,0 +1,34 @@
+AC_INIT([fcgi_request_cpp],[0.1],[chris@beneschtech.com])
+AM_INIT_AUTOMAKE
+AC_PROG_CPP
+AC_PROG_RANLIB
+
+LT_INIT
+AC_CONFIG_MACRO_DIRS([m4])
+AC_PROG_CC
+AC_PROG_CXX
+AC_LANG(C++)
+AC_PROG_SED
+PKG_PROG_PKG_CONFIG
+
+PKG_CHECK_MODULES([FCGI],[fcgi],[],AS_EXIT)
+AC_CHECK_HEADERS([fcgiapp.h],[],AS_EXIT)
+
+SCANRES
+AX_PTHREAD([
+  LIBS="$PTHREAD_LIBS $LIBS"
+  CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+  CXXFLAGS="$CXXFLAGS $PTHREAD_CFLAGS"
+  CC="$PTHREAD_CC"
+  CXX="$PTHREAD_CXX"
+],AS_EXIT)
+
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([
+Makefile
+src/Makefile
+src/lib/Makefile
+src/examples/Makefile
+src/examples/simple/Makefile
+])
+AC_OUTPUT
