@@ -66,7 +66,7 @@ bool FCGIData::append(std::string &s)
 {
   size_t sz = p_data.size();
   sz += s.size();
-  char *p = s.data();
+  const char *p = s.data();
   size_t i = 0;
   const size_t ssz = s.size();
   while (i < ssz)
@@ -81,6 +81,7 @@ std::string FCGIData::toStdString()
 {
   std::string rv;
   rv.resize(p_data.size());
-  memcpy(rv.data(),p_data.data(),p_data.size());
+  char *dest = const_cast<char *>(rv.data());
+  memcpy(dest,p_data.data(),p_data.size());
   return rv;
 }
