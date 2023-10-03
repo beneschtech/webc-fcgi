@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: install libfcgi
+      run: sudo apt install libfcgi-dev
     - name: autoreconf
       run: autoreconf -fi
     - name: configure
