@@ -15,7 +15,7 @@ namespace FCGI
 std::string urldecode(std::string s)
 {
     std::string rv;
-    char *p = s.data();
+    char *p = const_cast<char *>(s.data());
     const char *ep = &s.data()[s.length()];
     while (*p && p <= ep)
     {

@@ -12,7 +12,7 @@ std::vector<struct FCGIMultipartItem> FCGIRequest::parseMultipart(std::string bo
 
   std::string dataStr;
   dataStr.resize(data.size());
-  std::memcpy(dataStr.data(),data.get_for_modify(),data.size());
+  std::memcpy(const_cast<char *>(dataStr.data()),data.get_for_modify(),data.size());
   std::string::size_type idx = dataStr.find(boundary,0);
   const std::string::size_type bndLen = boundary.length();
 
