@@ -65,9 +65,9 @@ FCGIData base64Decode(std::string &in)
   for(i= '0';i<='9';i++){
     dtable[i]= 52+(i-'0');
   }
-  dtable['+']= 62;
-  dtable['/']= 63;
-  dtable['=']= 0;
+  dtable[size_t('+')]= 62;
+  dtable[size_t('/')]= 63;
+  dtable[size_t('=')]= 0;
   std::string::size_type idx = 0;
   const std::string::size_type inLen = in.length();
   FCGIData out;
