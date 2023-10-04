@@ -1,5 +1,12 @@
 Copyright 2023 Chris Benesch
 
+fcgi_request_cpp - A somewhat simple post processor for FastCGI
+requests to put in front of your CGI/C++ based application. It's
+a common thing to have to reinvent, and this saves that time
+
+Compare and inspired by the ancient ccgi package from GNU
+
+MIT Standard distribution license
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the “Software”),
 to deal in the Software without restriction, including without limitation

@@ -12,6 +12,12 @@
 #include <fcgi_request_cpp.hxx>
 #include <fcgiapp.h>
 
+/**
+ * @brief FCGIListener::FCGIListener default constructor
+ * There should only be one of these objects in an
+ * application and runs its event loop in a seperate
+ * thread
+ */
 FCGIListener::FCGIListener()
 {
     p_listenerSocketPath.clear();
@@ -21,6 +27,12 @@ FCGIListener::FCGIListener()
     p_state = INVALID;
 }
 
+/**
+ * @brief FCGIListener::FCGIListener c-tor which sets up
+ * the passed in path
+ * @param listenerPath the path to listen to as a unix
+ * socket filename, or TCP listen port
+ */
 FCGIListener::FCGIListener(std::string listenerPath)
     :FCGIListener()
 {

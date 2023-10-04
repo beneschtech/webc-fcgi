@@ -3,6 +3,12 @@
 #include <sys/stat.h>
 #include <fcgi_request_cpp.hxx>
 
+/*
+ * This was a program first written to test the library
+ * It really just returns OK or Ping based on the
+ * URL passed in, but provides good breakpoints to examine
+ * the data in the classes.
+ */
 int main()
 {
     FCGIListener l("/tmp/simple-pingpong.sock");

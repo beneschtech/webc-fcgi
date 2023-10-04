@@ -1,3 +1,6 @@
+# This encapsulates all of the results from
+# autoscan into one place, which makes configure.ac
+# a lot easier to read
 AC_DEFUN([SCANRES],
 [
 
@@ -22,5 +25,10 @@ AC_CHECK_HEADERS([sys/syscall.h])
 AC_CHECK_FUNCS([memset])
 AC_CHECK_FUNCS([socket]) 
 AC_CHECK_FUNCS([strerror])
+AC_CHECK_FUNCS([strtol])
+AC_CHECK_FUNCS([strtoul])
+AC_CHECK_HEADERS([fcntl.h])
+AC_CHECK_HEADERS([strings.h])
+AC_TYPE_MODE_T
 
 ])
