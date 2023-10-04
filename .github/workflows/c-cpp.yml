@@ -18,7 +18,7 @@ jobs:
     - name: autoreconf
       run: autoreconf -fi
     - name: configure
-      run: ./configure
+      run: ./configure CPPFLAGS="-Wall -Wextra"
     - name: make
       run: make
     - name: make check

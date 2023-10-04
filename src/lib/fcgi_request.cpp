@@ -74,7 +74,7 @@ void FCGIRequest::debug_dump()
     } else if (c == 10){
       std::cout << "\\n\n";
     } else if (!std::isprint(c)) {
-      char b[5] = {0,};
+      char b[10] = {0,};
       snprintf(b,2,"\\x%02x",c);
       std::cout << b;
     } else {
