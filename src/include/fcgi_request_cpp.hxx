@@ -116,7 +116,7 @@ public:
    * @brief at
    * @return returns the single byte at the position indicated
    */
-  const char at(size_t);
+  char at(const size_t);
   /**
    * @brief toStdString creates a std::String object with the
    * internal data copied to it and returns it. Binary safe
@@ -434,10 +434,10 @@ public:
 
   void set_listener_path(std::string p) { p_listenerSocketPath = p; }
   const std::string listener_path() { return p_listenerSocketPath; }
-  const int socket() { return p_fcgiHandle; }
-  bool const has_error() { return (p_errorString.length() > 0); }
+  int socket() { return p_fcgiHandle; }
+  bool has_error() { return (p_errorString.length() > 0); }
   const std::string error_string() { return p_errorString; }
-  const State state() { return p_state; }
+  State state() { return p_state; }
   FCGIRequest nextRequest();
 
 protected:

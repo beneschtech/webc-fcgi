@@ -30,6 +30,9 @@
 #include <config.h>
 #endif
 #include <fcgi_request_cpp.hxx>
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
 
 namespace FCGI {
 
@@ -73,14 +76,14 @@ FCGIData base64Decode(std::string &in)
 
     char inbuf[4] = {0,};
     for(i = 0; i<4; i++) {
-      char c = inbuf[i] = in.at(i+idx);
-
+      char ch = inbuf[i] = in.at(i+idx);
+      size_t c = ch;
       if(i+idx > inLen){
         return FCGIData();
       }
 
       if(dtable[c]&0x80){
-        fprintf(stderr,"Illegal character '%c' in base64 data.\n",c);
+        fprintf(stderr,"Illegal character '%c' in base64 data.\n",ch);
         return FCGIData();
       }
 
@@ -91,7 +94,7 @@ FCGIData base64Decode(std::string &in)
     o[1]= (b[1]<<4)|(b[2]>>2);
     o[2]= (b[2]<<6)|b[3];
     i= a[2]=='='?1:(a[3]=='='?2:3);
-    for (int j = 0; j < i; j++)
+    for (size_t j = 0; j < i; j++)
       out.append(o[j]);
     idx += i;
   }

@@ -75,7 +75,7 @@ void FCGIRequest::debug_dump()
       std::cout << "\\n\n";
     } else if (!std::isprint(c)) {
       char b[10] = {0,};
-      snprintf(b,2,"\\x%02x",c);
+      snprintf(b,sizeof(b),"\\x%02x",(c & 0xff));
       std::cout << b;
     } else {
       std::cout << c;
