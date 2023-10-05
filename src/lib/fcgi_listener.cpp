@@ -39,11 +39,21 @@ FCGIListener::FCGIListener(std::string listenerPath)
     p_listenerSocketPath = listenerPath;
 }
 
+/**
+ * @brief FCGIListener::~FCGIListener d-tor for the listening 
+ * object. Will also unlink the unix socket.
+ */
 FCGIListener::~FCGIListener()
 {
     ::unlink(p_listenerSocketPath.c_str());
 }
 
+/**
+ * @brief FCGIListener::open Attempts to open and create the UNIX socket.
+ * If successfull sets the internal status and the socket descriptor, otherwise
+ * sets the error flags and message
+ * @return true if success, false if not and sets the error string/flags
+ */
 bool FCGIListener::open()
 {    
     p_errorString.clear();
@@ -85,7 +95,12 @@ bool FCGIListener::open()
         p_state = ATTACHED;
     return (p_fcgiHandle != -1);
 }
-
+/**
+ * @brief FCGIListener::start checks that the socket has been open() ed
+ * then starts the accept thread in detached mode. The accept thread 
+ * will listen for connections and append requests to the queue
+ * @return true if started, false if there was a problem
+ */
 bool FCGIListener::start()
 {
     if (p_fcgiHandle <= 0)
@@ -103,7 +118,7 @@ bool FCGIListener::start()
     t1.detach();
     return true;
 }
-
+// Internal accept thread function
 void FCGIListener::thr_listen()
 {
     p_state = RUNNING;
@@ -135,14 +150,20 @@ void FCGIListener::thr_listen()
     }
     p_state = STOPPED;
 }
-
+/**
+ * @brief FCGIListener::stop
+ * Stops the accept thread and closes the unix socket
+ */
 void FCGIListener::stop()
 {
     p_stopFlag = true;
     ::shutdown(p_fcgiHandle,SHUT_RDWR);
     ::close(p_fcgiHandle);
 }
-
+/**
+ * @brief FCGIListener::nextRequest
+ * Gets the next request in the queue in a blocking manner
+ */
 FCGIRequest FCGIListener::nextRequest()
 {
     std::lock_guard<std::mutex> l(p_mutex);
