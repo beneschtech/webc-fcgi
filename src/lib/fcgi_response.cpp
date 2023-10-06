@@ -10,6 +10,12 @@
 #endif
 #include <fcgi_request_cpp.hxx>
 
+/**
+ * @brief FCGIResponse::FCGIResponse is responsible for sending the response
+ * to the browser. It takes the pointer from the request object associated
+ * with it to set everything up correctly
+ * @param p The raw pointer retrieved from FCGIRequest::FCGXHandle()
+ */
 FCGIResponse::FCGIResponse(const FCGX_Request *p)
 {
   p_fcgiHandle = p;
@@ -19,16 +25,38 @@ FCGIResponse::FCGIResponse(const FCGX_Request *p)
   p_httpCode = 200;
 }
 
+/**
+ * @brief FCGIResponse::set_cookie Adds or replaces a cookie to send via a
+ * Set-Cookie header in the response. The user is responsible for setting
+ * "value" to have any additional parameters, such as domains, expiry, etc..
+ * *Note* This header may be sent multiple times, and is correct to do so
+ * @param name The name of the cookie
+ * @param value The value and any additional attributes of the cookie
+ */
 void FCGIResponse::set_cookie(std::string name,std::string value)
 {
   p_cookies[name] = value;
 }
 
+/**
+ * @brief FCGIResponse::set_header Sets or replaces a raw header value.
+ * Common uses are Content-Type, Content-Disposition, or others. The only header
+ * that can not be set and is overridden is Content-Length which is determined
+ * by the data attached to this response
+ * @param name The name of the header, ie "Content-Type"
+ * @param value The value of the header, ie "text/html"
+ */
 void FCGIResponse::set_header(std::string name,std::string value)
 {
   p_headers[name] = value;
 }
 
+/**
+ * @brief FCGIResponse::send sends the message to the browser. At this point
+ * the object should be considered invalid and only read operations should be
+ * performed at this point.
+ * @return true if sent successfully, otherwise false
+ */
 bool FCGIResponse::send()
 {
   FCGX_Stream *strm = p_fcgiHandle->out;
@@ -59,7 +87,7 @@ bool FCGIResponse::send()
   }
   for (std::pair<std::string,std::string> h: p_cookies)
   {
-    std::string hl = "Set-Cookies: " + h.first + "=" + h.second + "\r\n";
+    std::string hl = "Set-Cookie: " + h.first + "=" + h.second + "\r\n";
     if (FCGX_PutS(hl.c_str(),strm) == -1)
     {
       return false;
@@ -80,23 +108,45 @@ bool FCGIResponse::send()
   return true;
 }
 
+/**
+ * @brief FCGIResponse::set_c_string sets the response data to the c string
+ * pointed to by s
+ * @param s the character pointer to set the data to
+ */
 void FCGIResponse::set_c_string(const char *s)
 {
   p_data.clear();
   p_data.append(s);
 }
 
+/**
+ * @brief FCGIResponse::set_string Sets the response data to the data contained in
+ * the passed std::string object, which should be binary safe.
+ * @param src a reference to the std::string object to set the data to
+ */
 void FCGIResponse::set_string(std::string &src)
 {
   p_data.clear();
   p_data.append(src);
 }
 
+/**
+ * @brief FCGIResponse::set_data sets the raw data pointed to by src for the length
+ * of sz as the response data. This is intended to send binary data from an in memory
+ * object.
+ * @param src pointer to the data to send
+ * @param sz the size of the data to send
+ */
 void FCGIResponse::set_data(void *src,size_t sz)
 {
   p_data = FCGIData((const char *)src,sz);
 }
 
+/**
+ * @brief FCGIResponse::read_local_file loads the file specified in filename to the
+ * data to send. This function is binary safe.
+ * @param filename the filename to load as the response data
+ */
 void FCGIResponse::read_local_file(std::string filename)
 {
   struct stat s;
